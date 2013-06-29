@@ -70,7 +70,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ccontext=this;
-        readname();
+        readname(0);
         root = Environment.getExternalStorageDirectory().getAbsolutePath()+"/";
         File createDir = new File(root+"Seq"+File.separator);
         if(!createDir.exists()) {
@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
         }        
         newll = new LinearLayout(this);
         newll.setOrientation(Configuration.ORIENTATION_PORTRAIT);
-        
+        /*
 	        ((Button) findViewById(R.id.img))
 	        .setOnClickListener(new OnClickListener() {
 	
@@ -104,7 +104,7 @@ public class MainActivity extends Activity {
 	            		Toast.makeText(ccontext, "Maximum 5 images allowed!!!", Toast.LENGTH_LONG).show();
 	            }
 	        });
-	
+	*//*
 	        ((Button) findViewById(R.id.audio))
 	        .setOnClickListener(new OnClickListener() {
 	
@@ -143,9 +143,9 @@ public class MainActivity extends Activity {
 	            	else
 	            		Toast.makeText(ccontext, "Maximum 5 images allowed!!!", Toast.LENGTH_LONG).show();
 	            }
-	        });
+	        });*/
 	        
-	        ((Button) findViewById(R.id.txt))
+	       /* ((Button) findViewById(R.id.txt))
 	        .setOnClickListener(new OnClickListener(){
 
 				@Override
@@ -175,9 +175,9 @@ public class MainActivity extends Activity {
 	            		Toast.makeText(ccontext, "Maximum 5 images allowed!!!", Toast.LENGTH_LONG).show();
 				}
 				
-				});
+				});*/
 	        
-	        ((Button) findViewById(R.id.next))
+	        /*((Button) findViewById(R.id.next))
 	        .setOnClickListener(new OnClickListener() {
 	
 	            public void onClick(View arg0) {
@@ -210,7 +210,7 @@ public class MainActivity extends Activity {
 	            		Toast.makeText(ccontext, "All inputs required!!!", Toast.LENGTH_LONG).show();
 	            	}
 	            }
-	        });
+	        });*/
 	        
 	        ((Button) findViewById(R.id.save))
 	        .setOnClickListener(new OnClickListener() {
@@ -233,12 +233,129 @@ public class MainActivity extends Activity {
 	        });
 	        
     }
-    public void readname() {
+    
+    public void imageButton(View arg0) {
+    	
+        // in onCreate or any event where your want the user to
+        // select a file
+    	
+    	//file = new File(root + "Seq" + File.separator +"img"+image_take+".jpg");
+    	if(image_num<6 && inpimg==false)
+        {	           
+        
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,
+                        "Select Picture"), SELECT_PICTURE);
+           
+        }
+    	else if(inpimg==true)
+    		Toast.makeText(ccontext, "Click next!!!", Toast.LENGTH_LONG).show();
+    	else
+    		Toast.makeText(ccontext, "Maximum 5 images allowed!!!", Toast.LENGTH_LONG).show();
+    }
+    
+    public void audioButton(View arg0) {
+    	
+        // in onCreate or any event where your want the user to
+        // select a file
+    	if(image_num<6 && inpaud==false)
+        {
+        	
+        		if(audbutclick==0)
+            	{
+            		audbutclick=1;
+            		
+	                mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+	                mFileName += "/Seq/"+name+"/audio"+image_num+".3gp";
+	                View ll=findViewById(R.id.audll);
+	                mRecordButton = new RecordButton(ccontext);
+	                ((LinearLayout) ll).addView(mRecordButton,
+	                    new LinearLayout.LayoutParams(
+	                        ViewGroup.LayoutParams.WRAP_CONTENT,
+	                        ViewGroup.LayoutParams.WRAP_CONTENT,
+	                        0));
+	                mPlayButton = new PlayButton(ccontext);
+	
+	                ((LinearLayout) ll).addView(mPlayButton,
+	                    new LinearLayout.LayoutParams(
+	                        ViewGroup.LayoutParams.WRAP_CONTENT,
+	                        ViewGroup.LayoutParams.WRAP_CONTENT,
+	                        0));
+	                //setContentView(ll);
+	            }
+        }
+    	else if(inpaud==true)
+    		Toast.makeText(ccontext, "Already has audio for this image!!!", Toast.LENGTH_LONG).show();
+    	else
+    		Toast.makeText(ccontext, "Maximum 5 images allowed!!!", Toast.LENGTH_LONG).show();
+    }
+    
+	public void txtButton(View arg0) {
+		// TODO Auto-generated method stub
+		if(image_num<6 && inptxt==false)
+		{
+			AlertDialog.Builder alert2 = new AlertDialog.Builder(ccontext);
+			alert2.setTitle("Text for Image");
+			final EditText input_text = new EditText(ccontext);
+			alert2.setView(input_text);
+			alert2.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					String input_value = input_text.getText().toString();
+					saveText(input_value);
+					done++;
+					inptxt=true;
+				 }
+
+				
+			});
+			alert2.show();
+		}
+		else if(inpaud==true)
+    		Toast.makeText(ccontext, "Already has text for this image!!!", Toast.LENGTH_LONG).show();
+    	else
+    		Toast.makeText(ccontext, "Maximum 5 images allowed!!!", Toast.LENGTH_LONG).show();
+	}
+    
+    public void nextButton(View arg0) {
+    	Log.d("","next done: "+done);
+    	if(done==3)
+    	{
+    		newll= new LinearLayout(ccontext);
+            newll.setOrientation(Configuration.ORIENTATION_PORTRAIT);
+    		
+    		done=0;                		
+    		audbutclick=0;
+            image_num++;
+            inpimg=false;
+            inpaud=false;
+            inptxt=false;
+            //View ll=findViewById(R.id.ll_aud);
+	        //View view = (View) event.getLocalState();
+	        ViewGroup owner = (ViewGroup) mRecordButton.getParent();
+	        owner.removeView(mRecordButton);
+	        owner.removeView(mPlayButton);
+            //mRecordButton.setVisibility(View.INVISIBLE);
+            //mPlayButton.setVisibility(View.INVISIBLE);
+    	}
+    	else if(image_num==6)
+    	{
+    		finish();
+    	}
+    	else
+    	{
+    		Toast.makeText(ccontext, "All inputs required!!!", Toast.LENGTH_LONG).show();
+    	}
+    }
+	public void readname(int a) {
 		// TODO Auto-generated method stub
     	AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-		alert.setTitle("Sequence Name");
-
+    	alert.setCancelable(false);
+    	if(a==0)
+    		alert.setTitle("Sequence Name");
+    	else
+    		alert.setTitle("Please enter a Sequece Name");
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
 		alert.setView(input);
@@ -246,13 +363,18 @@ public class MainActivity extends Activity {
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichButton) {
 			String value = input.getText().toString();
-			File createDir2 = new File(root+"Seq/"+value+File.separator);
-	        Log.d("new dir", root+"Seq/"+value+File.separator);  
-	        if(!createDir2.exists()) {
-	            createDir2.mkdir();	            
-	            //Log.d("new dir", root+"Seq"+File.separator );
-	        }        
-			setname(value);
+			if(value.equals("")){
+				readname(1);
+			}
+			else{
+				File createDir2 = new File(root+"Seq/"+value+File.separator);
+				Log.d("new dir", root+"Seq/"+value+File.separator);  
+				if(!createDir2.exists()) {
+					createDir2.mkdir();	            
+					//Log.d("new dir", root+"Seq"+File.separator );
+				}        
+				setname(value);
+			}
 		 }
 		});
 		alert.show();
