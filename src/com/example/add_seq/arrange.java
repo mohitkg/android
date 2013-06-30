@@ -1,43 +1,276 @@
 package com.example.add_seq;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.DragShadowBuilder;
+import android.view.View.OnDragListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
 public class arrange extends Activity{
+
+	public static final String LOG_TAG = "AudioRecordTest";
+	View viewmoving;
+	Rect hitRect;
+	int length;
+	String str;
+	int correct=0;
+	int droppedimage=0;
+	MediaPlayer mPlayer=null;
+	List<Integer> shufindex;
+	LayoutParams params;
+	View ll,ll2;
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.arrange);
 	    Intent intent =getIntent();
 	    String names=intent.getStringExtra("names");
-	    int length = intent.getIntExtra("length", 3);
-	    String str = "/mnt/sdcard/Seq/"+ names;
-	    View ll =findViewById(R.id.ll);
-	    LayoutParams params = new LinearLayout.LayoutParams(100,100);
+	    length = intent.getIntExtra("length", 3);
+	    
+	    hitRect=new Rect();
+	    str = "/mnt/sdcard/Seq/"+ names;
+	    ll =findViewById(R.id.ll);
+	    ll2 =findViewById(R.id.ll2);	    
+	    ll2.setOnDragListener(new MyDragListener());
+	    params = new LinearLayout.LayoutParams(100,100);
 	    int i=1;
 	    
-	    for(i=1;i<=length;i++)
+	    shufindex = new ArrayList<Integer>(length);
+	    for(i=0;i<length;i++)
+	    	shufindex.add(i);
+    	Collections.shuffle(shufindex);
+    	
+    	Log.d("","im array1");
+	    //ImageView[] im=new ImageView[length];
+	    Log.d("","im array2");
+	    int j;	    
+	    for(i=0;i<length;i++)
 	    {
-		    File f=new File(str+"/i"+i+".jpg");
-		    ImageView im=new ImageView(this);
+	    	
+	    	ImageView im=new ImageView(this);
+	    	ImageView im2=new ImageView(this);
+	    	
+	    	j=shufindex.get((i));
+	    	Log.d("","correct "+i+" to "+j);
+		    File f=new File(str+"/i"+(j+1)+".jpg");		    
+		    Log.d("","im array3i "+i);
 		    Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
-		    params.setMargins(20, 10, 20, 10);
+		    Log.d("","im array4j "+j);
+		    params.setMargins(20, 10, 20, 10);		    
 		    im.setLayoutParams(params);
+		    im2.setLayoutParams(params);
 		    im.setImageBitmap(bmp);
-		    im.setMaxHeight(i);
-		    im.setMaxWidth(i);
-		    
+		    im2.setImageResource(R.drawable.border);
+		    im.setId(j);
+		    im2.setId(i+length);
+		    //im[i-1].setMaxHeight(i);
+		    //im[i-1].setMaxWidth(i);
+	    	im.setOnTouchListener(new MyTouchListener());
 		    ((LinearLayout) ll).addView(im);
-	    }
-	    	    	    
+		    ((LinearLayout) ll2).addView(im2);		    
+		    Log.d("","im array5");		    
+	    }		    
 	}
+
+	public void readstory(View arg0)
+	{
+		if(correct==length)
+		{
+			//put animation
+			finish();
+		}
+		else if(droppedimage==length)
+		{
+			//wrong answer
+			int i,j;
+			correct=0;
+			droppedimage=0;
+			shufindex = new ArrayList<Integer>(length);
+			for(i=0;i<length;i++)
+			{
+				shufindex.add(i);
+				ImageView im3=(ImageView) findViewById((i+length));
+				ViewGroup owner = (ViewGroup) im3.getParent();
+		        owner.removeView(im3);
+			}
+			Collections.shuffle(shufindex);
+	    	
+	    	Log.d("","im array1");
+		    //ImageView[] im=new ImageView[length];
+		    Log.d("","im array2");		    
+		    for(i=0;i<length;i++)
+		    {
+		    	
+		    	ImageView im=new ImageView(this);
+		    	ImageView im2=new ImageView(this);
+		    	
+		    	j=shufindex.get((i));
+		    	Log.d("","correct "+i+" to "+j);
+			    File f=new File(str+"/i"+(j+1)+".jpg");		    
+			    Log.d("","im array3i "+i);
+			    Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
+			    Log.d("","im array4j "+j);
+			    params.setMargins(20, 10, 20, 10);		    
+			    im.setLayoutParams(params);
+			    im2.setLayoutParams(params);
+			    im.setImageBitmap(bmp);
+			    im2.setImageResource(R.drawable.border);
+			    im.setId(j);
+			    im2.setId(i+length);
+			    //im[i-1].setMaxHeight(i);
+			    //im[i-1].setMaxWidth(i);
+		    	im.setOnTouchListener(new MyTouchListener());
+			    ((LinearLayout) ll).addView(im);
+			    ((LinearLayout) ll2).addView(im2);		    
+			    Log.d("","im array5");		    
+		    }			
+		}
+	}
+	
+	
+public final class MyTouchListener implements OnTouchListener {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public boolean onTouch(View view, MotionEvent motionEvent) {
+      if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+        ClipData data = ClipData.newPlainText("", "");
+        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+        view.startDrag(data, shadowBuilder, view, 0);
+        
+        //view.setVisibility(View.INVISIBLE);
+        viewmoving=view;
+        if(mPlayer!=null)
+        {
+        	mPlayer.stop();
+        	mPlayer.release();
+        	mPlayer = null;
+        }
+        startPlaying();
+        Log.d("touching","touching");
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+public void startPlaying() {
+    mPlayer = new MediaPlayer();
+    Log.d("","audio enter play");
+    try {
+    	Log.d("","audio enter play try");
+    	int id=viewmoving.getId();
+        String f=str+"/audio"+(id+1)+".3gp";
+        Log.d("","audio f: "+f);
+        mPlayer.setDataSource(f);
+        mPlayer.prepare();
+        mPlayer.start();
+    } catch (IOException e) {
+    	Log.d("","audio enter play catch");
+        Log.e(LOG_TAG, "prepare() failed");
+    }
+}
+  @SuppressLint("NewApi")
+class MyDragListener implements OnDragListener {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	@Override
+    public boolean onDrag(View v, DragEvent event) {
+      //int action = event.getAction();
+		int x = (int)event.getX();
+	    int y = (int)event.getY();
+      Log.d("","dragg");
+      Log.d("x","point x: "+event.getX());
+	  Log.d("y","point y: "+event.getX());
+      switch (event.getAction()) {
+      case DragEvent.ACTION_DRAG_STARTED:
+        // Do nothing	    	  
+        break;
+      /*case DragEvent.ACTION_DRAG_ENTERED:
+        v.setBackgroundDrawable(enterShape);
+        break;
+      case DragEvent.ACTION_DRAG_EXITED:
+        v.setBackgroundDrawable(normalShape);
+        break;*/
+      case DragEvent.ACTION_DROP:
+        // Dropped, reassign View to ViewGroup
+    	  mPlayer.stop();
+    	  mPlayer.release();
+      	  mPlayer = null;
+    	  float x1=event.getX();
+    	  float y1=event.getY();
+    	  boolean drop=false;
+    	  Log.d("","enter x1 y1 "+x1+" "+y1);
+    	  int i,j=0;
+    	  for(i=0;i<length;i++)
+    	  {
+    		  ImageView im3=(ImageView) findViewById(i+length);
+    		  im3.getHitRect(hitRect);
+    		  if(hitRect.contains(x, y))
+    		  {
+    			  drop=true;
+    			  j=i;
+    		  }
+    	  }
+    	  Log.d("","drop img drop to : "+j);
+    	  if(drop==true)
+    	  {
+    		  drop=false;
+    		  	Log.d("enter cum","enter cum");
+    		  	
+    		  	int id=viewmoving.getId();
+    		  	ImageView im3=(ImageView) findViewById(j+length);
+    		  	if(im3.getTag()!="done")
+    		  	{
+	    		  	Log.d("","id: 1st im3 "+(j+length));
+	    		  	File f=new File(str+"/i"+(id+1)+".jpg");		    
+	    		    Log.d("","id: copied "+id);
+	    		    Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
+	    		    im3.setImageBitmap(bmp);
+	    		    im3.setTag("done");
+	    		    Log.d("","id: im3 last "+im3.getId());
+			        View view = (View) event.getLocalState();
+			        ViewGroup owner = (ViewGroup) view.getParent();
+			        owner.removeView(view);
+			        
+			        //checking correctness
+			        droppedimage++;
+			        if(j==id)
+			        	correct++;
+			        Log.d("","correct: "+ correct);			        
+    		  	}
+    	  }	    	  
+    	  
+        break;
+      /*case DragEvent.ACTION_DRAG_ENDED:
+        v.setBackgroundDrawable(normalShape);*/
+      default:
+        break;
+      }
+      return true;
+    }
+}
+  
 }
