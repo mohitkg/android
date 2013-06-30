@@ -29,6 +29,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -320,6 +322,7 @@ public class MainActivity extends Activity {
     
     public void nextButton(View arg0) {
     	Log.d("","next done: "+done);
+    	
     	if(done==3)
     	{
     		newll= new LinearLayout(ccontext);
@@ -336,6 +339,7 @@ public class MainActivity extends Activity {
 	        ViewGroup owner = (ViewGroup) mRecordButton.getParent();
 	        owner.removeView(mRecordButton);
 	        owner.removeView(mPlayButton);
+	        
             //mRecordButton.setVisibility(View.INVISIBLE);
             //mPlayButton.setVisibility(View.INVISIBLE);
     	}
@@ -611,42 +615,61 @@ public class MainActivity extends Activity {
 				} catch (FileNotFoundException e2) {
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
-				} catch (IOException e) {
+				} catch (IOException e) { 
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 
                 View topll=findViewById(R.id.topll);
                 inpimg=true;
                 Log.d("error", "msg");
+                Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
+                Animation translate = AnimationUtils.loadAnimation(this, R.anim.translate);
                 ImageView ig = new ImageView(this);
-                LayoutParams params = new LinearLayout.LayoutParams(200,200);                
+                LayoutParams params = new LinearLayout.LayoutParams(145,145);
+                
                 ig.setImageURI(selectedImageUri);
                 ig.setLayoutParams(params);
-                ig.setScaleType(ScaleType.FIT_XY);                
-                Log.d("","work inptxt");
+                ig.setScaleType(ScaleType.FIT_XY);  
+              //  ig.setId(45);
+                ig.setAnimation(shake);
                 if(inptxt==true)
                 {
                 	ViewGroup owner = (ViewGroup) newll.getParent();
 			        owner.removeView(newll);
-			        Log.d("","work inptxt templl");
 			        LinearLayout templl=new LinearLayout(this);
 			        templl.addView(newll);
-			        Log.d("","work inptxt templl");
 			        newll=new LinearLayout(this);
+			        LayoutParams params_linear = new LinearLayout.LayoutParams(150,150);
+			        params_linear.setMargins(5, 10, 5, 10);
 			        newll.setOrientation(Configuration.ORIENTATION_PORTRAIT);
+			        //newll.setBackgroundResource(R.id.img);
+			        newll.setLayoutParams(params_linear);
 	                newll.addView(ig);
-	                Log.d("","work inptxt templl");
+	                newll.setAnimation(translate);
 	                newll.addView(templl);
+	               // newll.startAnimation(translate);
+	                Log.d("animation", "animation added");
+
 	                ((LinearLayout) topll).addView(newll);
-	                Log.d("","work inptxt templl");
+	                
                 }
                 else
-                {
-                	Log.d("","work inptxt");
-                	((LinearLayout) newll).addView(ig);
-                    Log.d("","work inptxt");
+                {   
+                	
+             //   	((LinearLayout) newll).addView(ig);
+			     //   LinearLayout =new LinearLayout(this);
+
+                	LayoutParams params_linear = new LinearLayout.LayoutParams(150,150);
+			        params_linear.setMargins(10, 10, 10, 10);
+			        newll.setLayoutParams(params_linear);
+			        ((LinearLayout) newll).addView(ig);
+                	//newll.setBackgroundResource(R.id.img);
+                	
+                	newll.startAnimation(translate);
                 	((LinearLayout) topll).addView(newll);
+                	Log.d("animation", "animatoin added in else");
                 }
+               // topll.setAnimation (translate);
                 Log.d("","work inptxt");
                 done++;
                 

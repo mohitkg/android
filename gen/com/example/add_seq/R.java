@@ -10,7 +10,10 @@ package com.example.add_seq;
 public final class R {
     public static final class anim {
         public static final int cycle_7=0x7f040000;
-        public static final int shake=0x7f040001;
+        public static final int faltu=0x7f040001;
+        public static final int shake=0x7f040002;
+        public static final int tranlate_y=0x7f040003;
+        public static final int translate=0x7f040004;
     }
     public static final class attr {
     }
