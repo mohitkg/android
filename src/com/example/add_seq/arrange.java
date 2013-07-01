@@ -25,6 +25,7 @@ import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -85,6 +86,7 @@ public class arrange extends Activity{
 		    im2.setLayoutParams(params);
 		    im.setImageBitmap(bmp);
 		    im2.setImageResource(R.drawable.border);
+		    
 		    im.setId(j);
 		    im2.setId(i+length);
 		    //im[i-1].setMaxHeight(i);
@@ -99,9 +101,33 @@ public class arrange extends Activity{
 	public void readstory(View arg0)
 	{
 		if(correct==length)
+		//if(true)
 		{
+
 			//put animation
-			finish();
+			TranslateAnimation animation = new TranslateAnimation(0, 0, 0, 150);
+			animation.setDuration(1000);
+			animation.setFillAfter(false);
+			animation.setAnimationListener(new AnimListener(length));
+			animation.setFillAfter(true);
+			ImageView im = (ImageView) findViewById(length);
+			ImageView im1 = (ImageView) findViewById(length+1);
+			ImageView im2 = (ImageView) findViewById(length+2);
+			if(length>3){
+				ImageView im3 = (ImageView) findViewById(length+3);
+				im3.startAnimation(animation);
+			}
+			if(length>4){
+				ImageView im4 = (ImageView) findViewById(length+4);
+				im4.startAnimation(animation);
+			}
+			
+			
+			im.startAnimation(animation);
+			im1.startAnimation(animation);
+			im2.startAnimation(animation);
+			
+			//finish();
 		}
 		else if(droppedimage==length)
 		{

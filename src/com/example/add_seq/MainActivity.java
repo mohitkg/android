@@ -17,14 +17,12 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,6 +31,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
@@ -223,6 +222,7 @@ public class MainActivity extends Activity {
 	                    Sql entry = new Sql(ccontext);
 	                    entry.open();
 	                    entry.createEntry(name,""+(image_num-1));
+	                    Log.d("put in database", name + " and " + (image_num - 1));
 	                    entry.close();
 	            		
 	            		finish();
@@ -233,6 +233,7 @@ public class MainActivity extends Activity {
 	            	}
 	            }
 	        });
+	       
 	        
     }
     

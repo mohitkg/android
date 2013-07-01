@@ -14,7 +14,7 @@ public class Sql {
 	
 	private static final String DATABASE_NAME = "SequenceDb.db";
 	private static final String DATABASE_TABLE = "logTable";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	
 	private DbHelper ourHelper;
 	private final Context ourContext;

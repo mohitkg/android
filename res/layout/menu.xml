@@ -14,18 +14,21 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        
-        >       
+        android:scrollbars="none">  
         <LinearLayout
-        android:id="@+id/layout1"
-        android:background="#ffff00"
-        android:layout_width="200dp"
-        android:layout_height="200dp"        
-        android:orientation="vertical"
-        >        
-  	 
-    </LinearLayout>
+	        android:id="@+id/lay"
+	        android:background="#ffff00"
+	        android:layout_width="200dp"
+	        android:layout_height="600dp"        
+	        android:orientation="vertical"> 
+	          	<LinearLayout
+		        android:id="@+id/layout1"
+		        android:layout_width="200dp"
+		        android:layout_height="wrap_content"		               
+		        android:orientation="vertical"
+		        > 
+		        </LinearLayout>       
+    	</LinearLayout>
     </ScrollView>
  	</LinearLayout>
  	<LinearLayout 
@@ -36,33 +39,39 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        >       
+        android:scrollbars="none">
         <LinearLayout
-        android:id="@+id/layout2"
-        android:background="#ff0000"
-        android:layout_width="200dp"
-        android:layout_height="200dp"        
-        android:orientation="vertical"
-        >        
-  	 
-    </LinearLayout>
+	        android:id="@+id/lay2"
+	        android:background="#ff0000"
+	        android:layout_width="200dp"
+	        android:layout_height="600dp"        
+	        android:orientation="vertical">
+       		<LinearLayout
+		        android:id="@+id/layout2"
+		        android:layout_width="200dp"
+		        android:layout_height="wrap_content"
+		        android:orientation="vertical">        
+  	 		</LinearLayout>
+  	 	</LinearLayout>
     </ScrollView>
     </LinearLayout>
      <ScrollView
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        >       
+        android:scrollbars="none">
         <LinearLayout
-        android:id="@+id/layout3"
-        android:background="#00ff00"
-        android:layout_width="200dp"
-        android:layout_height="200dp"        
-        android:orientation="vertical"
-        >        
-  	 
-    </LinearLayout>
+	        android:id="@+id/lay3"
+	        android:background="#00ff00"
+	        android:layout_width="200dp"
+	        android:layout_height="1000dp"        
+	        android:orientation="vertical">		    	       
+	        <LinearLayout
+		        android:id="@+id/layout3"
+		        android:layout_width="200dp"
+		        android:layout_height="wrap_content"		        
+		        android:orientation="vertical">        
+	  	 	</LinearLayout>
+	  	 </LinearLayout>
     </ScrollView>
     <LinearLayout 
  	    android:layout_width="50dp"
