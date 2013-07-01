@@ -43,7 +43,7 @@ public final class R {
         public static final int text=0x7f02000b;
     }
     public static final class id {
-        public static final int action_settings=0x7f090013;
+        public static final int action_settings=0x7f090014;
         public static final int audio=0x7f090004;
         public static final int audll=0x7f090008;
         public static final int botll=0x7f090002;
@@ -61,6 +61,7 @@ public final class R {
         public static final int plus=0x7f090012;
         public static final int save=0x7f090007;
         public static final int seq_name=0x7f090000;
+        public static final int test=0x7f090013;
         public static final int topll=0x7f090001;
         public static final int txt=0x7f090005;
     }

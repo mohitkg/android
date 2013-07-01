@@ -29,6 +29,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Toast;
 
 public class arrange extends Activity{
 
@@ -179,27 +180,75 @@ public class arrange extends Activity{
 	
 	
 public final class MyTouchListener implements OnTouchListener {
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private static final long ONE_SECOND = 1000;
+    int clickCount = 0;
+	long startTime = 0;
+	long duration;
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public boolean onTouch(View view, MotionEvent motionEvent) {
-      if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-        ClipData data = ClipData.newPlainText("", "");
-        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-        view.startDrag(data, shadowBuilder, view, 0);
-        
-        //view.setVisibility(View.INVISIBLE);
-        viewmoving=view;
-        if(mPlayer!=null)
+    	//for image zooming 
+    	
+    	
+    	//static final int MAX_DURATION = 500;
+    	switch(motionEvent.getAction() & MotionEvent.ACTION_MASK)
         {
-        	mPlayer.stop();
-        	mPlayer.release();
-        	mPlayer = null;
+    		
+            /*case MotionEvent.ACTION_DOWN:
+            	
+                startTime = System.currentTimeMillis();
+                Log.d("toast", "stat time of ACTION_DOWN :" + startTime);
+                clickCount++;
+                break;*/
+    	case MotionEvent.ACTION_DOWN:
+		    	ClipData data = ClipData.newPlainText("", "");
+		        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+		        view.startDrag(data, shadowBuilder, view, 0);
+		        
+		        //view.setVisibility(View.INVISIBLE);
+		        viewmoving=view;
+		        if(mPlayer!=null)
+		        {
+		        	mPlayer.stop();
+		        	mPlayer.release();
+		        	mPlayer = null;
+		        }
+		        startPlaying();
+		        Log.d("touching","touching");
+		      //  return true;
+       
+        case MotionEvent.ACTION_UP:
+            	
+            	clickCount++;
+
+                if (clickCount==1){
+                    startTime = System.currentTimeMillis();
+                    
+                }
+
+                else if(clickCount == 2)
+                {	
+                    duration =  System.currentTimeMillis() - startTime;
+                    if(duration <= ONE_SECOND)
+                    {                    
+                            Toast.makeText(arrange.this, "double tap",Toast.LENGTH_SHORT).show();
+                            Log.d("toast", "duration : " + "toast was made");
+                            clickCount = 0;
+                            duration = 0;
+                    }else{
+                        clickCount = 1;
+                        startTime = System.currentTimeMillis();
+                    }
+                    break;             
+                }
         }
-        startPlaying();
-        Log.d("touching","touching");
-        return true;
-      } else {
-        return false;
-      }
+    	return true;
+		
+		
+	//Code for drag and drop	
+    	/*	
+      if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+        
+     */ 
     }
   }
 

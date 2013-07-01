@@ -86,6 +86,13 @@
         android:scaleType="fitCenter"
         android:onClick="add"
         android:src="@drawable/plus" />   
+    <ImageView 
+        android:id="@+id/test"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/audio"
+        />
      </LinearLayout>   
     
 </LinearLayout>
