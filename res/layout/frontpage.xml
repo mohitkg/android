@@ -1,0 +1,30 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    >
+
+ 
+
+    <Button
+        android:id="@+id/student"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:onClick="student"
+        android:text="\u2713 on"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+   <Button
+        android:id="@+id/teacher"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:layout_alignLeft="@+id/student"
+        android:layout_below="@+id/student"
+        android:layout_marginTop="39dp"
+        android:text="Teacher"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:onClick="teacher" />
+</RelativeLayout>

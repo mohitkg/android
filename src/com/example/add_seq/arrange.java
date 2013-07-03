@@ -19,6 +19,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
@@ -44,13 +46,14 @@ public class arrange extends Activity{
 	List<Integer> shufindex;
 	LayoutParams params;
 	View ll,ll2;
+	String names;
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.arrange);
 	    Intent intent =getIntent();
-	    String names=intent.getStringExtra("names");
+	    names=intent.getStringExtra("names");
 	    length = intent.getIntExtra("length", 3);
 	    
 	    hitRect=new Rect();
@@ -184,6 +187,8 @@ public final class MyTouchListener implements OnTouchListener {
     int clickCount = 0;
 	long startTime = 0;
 	long duration;
+	Toast toast;
+	View layout;
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public boolean onTouch(View view, MotionEvent motionEvent) {
     	//for image zooming 
@@ -229,8 +234,29 @@ public final class MyTouchListener implements OnTouchListener {
                 {	
                     duration =  System.currentTimeMillis() - startTime;
                     if(duration <= ONE_SECOND)
-                    {                    
-                            Toast.makeText(arrange.this, "double tap",Toast.LENGTH_SHORT).show();
+                    {   	LayoutInflater inflater = getLayoutInflater();
+		                	layout = inflater.inflate(R.layout.toast_layout,(ViewGroup) findViewById(R.id.toast_layout_root));
+		                	ImageView img = (ImageView) layout.findViewById(R.id.timage);
+		                	//str = "/mnt/sdcard/Seq/"+ names;
+		                	int id = view.getId();
+		                	File f=new File(str+"/i"+(id+1)+".jpg");		    
+			    		    Log.d("","id: copied "+id);
+			    		    Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
+			    		    img.setImageBitmap(bmp);
+			    		    Log.d("", "ho gya!!");
+			    		    img.setTag("done");
+		                	//img.setImageResource(R.id.plus);
+		                	//img.setImageResource(view.getId());
+		                	toast = new Toast(arrange.this);
+		            		//toast.setGravity(Gravity.FILL, 0, 0);
+		            		toast.setDuration(Toast.LENGTH_SHORT);
+		            		toast.setView(layout);
+		            		//toast.setView(viewmoving);
+		            		toast.show();
+		            		
+		                    	
+                    	
+                            /*Toast.makeText(arrange.this, "double tap",Toast.LENGTH_SHORT).show();*/
                             Log.d("toast", "duration : " + "toast was made");
                             clickCount = 0;
                             duration = 0;

@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.add_seq.menu"
+            android:name="com.example.add_seq.FrontPage"
             android:label="@string/app_name"
             android:configChanges="orientation" 
             android:screenOrientation="landscape">
@@ -25,6 +25,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.add_seq.menu"
+            android:configChanges="orientation" 
+            android:screenOrientation="landscape"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.example.add_seq.menu_teacher"
+            android:configChanges="orientation" 
+            android:screenOrientation="landscape"
+            android:label="@string/app_name" >
         </activity>
         
         <activity
